@@ -77,3 +77,14 @@ The same architecture can later be extended with vector databases or LLM-based a
 
 The main focus of this project is clarity, modular design, and grounded answers with traceable evidence.
 
+## LLM Extension Design (Added After Review)
+
+Based on the feedback, an additional design layer has been included to demonstrate how the current rule-based multi-agent pipeline can be extended to support LLM-driven orchestration.
+
+A new folder `llm_design` has been added with the following details:
+- `dataset_tool_schema.md` – explains how the dataset can be exposed as a structured tool for LLM-based data calls
+- `prompt_templates.md` – provides prompt structures for planner, entity extraction, and answer synthesis stages
+- `llm_agent_stub.py` – a simple demonstration showing where and how LLM calls can be integrated into the existing pipeline
+
+These additions are meant to illustrate the future integration of LLM agents while keeping the current deterministic implementation unchanged.
+
