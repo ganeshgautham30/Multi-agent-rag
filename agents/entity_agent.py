@@ -1,22 +1,36 @@
-import re
-
+import json
+from core.llm_client import call_llm
 def extract_entities(question: str) -> dict:
-    entities = {}
-
-    chem = re.search(r'chemical\s+([\w\s\-]+)', question, re.IGNORECASE)
-    if chem:
-        entities["ChemicalName"] = chem.group(1).strip()
-
-    brand = re.search(r'brand\s+([\w\s\-]+)', question, re.IGNORECASE)
-    if brand:
-        entities["BrandName"] = brand.group(1).strip()
-
-    cas = re.search(r'cas\s*([\d\-]+)', question, re.IGNORECASE)
-    if cas:
-        entities["CasNumber"] = cas.group(1).strip()
-
-    year = re.search(r'(20\d{2})', question)
-    if year:
-        entities["Year"] = year.group(1)
-
-    return entities
+   prompt = f"""
+You are an entity extraction system.
+Extract the following fields from the user question.
+Return ONLY valid JSON.
+Do NOT add explanation.
+If a field is not present, return empty string "".
+Required keys:
+- ChemicalName
+- BrandName
+- CasNumber
+- Year
+Question:
+{question}
+Example output:
+{{
+ "ChemicalName": "",
+ "BrandName": "",
+ "CasNumber": "",
+ "Year": ""
+}}
+"""
+   response = call_llm(prompt)
+   try:
+       entities = json.loads(response)
+   except:
+       # fallback safe default
+       entities = {
+           "ChemicalName": "",
+           "BrandName": "",
+           "CasNumber": "",
+           "Year": ""
+       }
+   return entities

@@ -1,34 +1,25 @@
-from agents.orchestrator import run_orchestrator
+from orchestrator import run_orchestrator
 
 def main():
-    print("=== Multi-Agent Chemical Disclosure RAG System ===")
-
-    while True:
-        question = input("\nAsk your question (type 'exit' to quit): ")
-        if question.lower() == "exit":
-            break
-
-        response = run_orchestrator(question)
-
-        print("\n===== STATUS =====")
-        print(response["status"])
-
-        print("\n===== SHORT ANSWER =====")
-        print(response["answer"])
-
-        print("\n===== DETAILED EVIDENCE =====")
-        for row in response["details"]:
-            print(
-                f"Product: {row['ProductName']} | "
-                f"Company: {row['CompanyName']} | "
-                f"Brand: {row['BrandName']} | "
-                f"Chemical: {row['ChemicalName']} | "
-                f"CAS: {row['CasNumber']}"
-            )
-
-        print("\n===== QUERY PLAN TRACE =====")
-        for step in response["query_plan"]:
-            print("-", step)
+   print("\n=== Multi-Agent Chemical Disclosure Assistant ===")
+   print("Type your question below. Type 'exit' to quit.\n")
+   while True:
+       question = input("Ask: ")
+       if question.lower() in ["exit", "quit"]:
+           print("Goodbye")
+           break
+       response = run_orchestrator(question)
+       print("\n--- STATUS ---")
+       print(response.get("status"))
+       print("\n--- ANSWER ---")
+       print(response.get("answer"))
+       print("\n--- QUERY PLAN ---")
+       for step in response.get("query_plan", []):
+           print("•", step)
+       if "semantic_analysis" in response:
+           print("\n--- SEMANTIC ANALYSIS ---")
+           print(response["semantic_analysis"])
+       print("\n" + "="*50 + "\n")
 
 if __name__ == "__main__":
-    main()
+   main()
